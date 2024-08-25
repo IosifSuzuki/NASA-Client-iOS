@@ -1,0 +1,27 @@
+/* 
+  Localizable.strings
+  NASAClient
+
+  Created by Bogdan Petkanych on 24.08.2024.
+  
+*/
+
+"App.name" = "NASA Client";
+"Date" = "Date";
+"Camera" = "Camera";
+"Rover" = "Rover";
+"Save" = "Save";
+"Cancel" = "Cancel";
+"Filters" = "Filters";
+"Date" = "Date";
+"Use" = "Use";
+"Loading" = "Loading";
+
+"Home.title" = "MARS.CAMERA";
+"Home.Photos.noData" = "No Mars photos available in your collection. Adjust your filter options and try again!";
+"Home.SaveFilters.title" = "Save Filters";
+"Home.SaveFilters.subtitle" = "The current filters and the date you have chosen can be saved to the filter history.";
+
+"History.title" = "History";
+"History.noDate" = "Browsing history is empty.";
+"History.menuFilter" = "Menu Filter";

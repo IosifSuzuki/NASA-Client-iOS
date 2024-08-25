@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "ic_rover.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

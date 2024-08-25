@@ -56,10 +56,10 @@ enum HTTP {
       switch self {
       case .badRequest:
         "Bad request"
-      case .invalidJSON(let message):
-        "Invalid JSON. The JSON data is malformed: \(message)"
-      case .api(let code, let message):
-        "API error [\(code): \(message)]"
+      case .invalidJSON:
+        "Invalid JSON. The JSON data is malformed"
+      case .api(let code, _):
+        "API error [\(code)]"
       case .unknownResponse:
         "Unhandleable response"
       }

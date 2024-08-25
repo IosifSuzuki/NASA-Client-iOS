@@ -54,12 +54,14 @@ class HomeViewModel: ObservableObject {
   private let pageSize: Int = 25
   private var page: Int = 1
   private let apiClient: APIClient
+  private let filterDataManager: FilterDataManager
   private var fetchSubcription: AnyCancellable?
   private var bag = Set<AnyCancellable>()
   
-  init(apiClient: APIClient) {
+  init(apiClient: APIClient, filterDataManager: FilterDataManager) {
     self.title = String(localized: "Home.title")
     self.apiClient = apiClient
+    self.filterDataManager = filterDataManager
     self.selectedDate = Date.date(year: 2023, month: 12, day: 01) ?? .now
     self.selectedRoverText = selectedRoverOption.name
     self.selectedCameraText = selectedCameraOption.shortName
@@ -72,7 +74,12 @@ class HomeViewModel: ObservableObject {
   }
   
   func saveFilter() {
-    
+    let filter = Filter(roverOption: selectedRoverOption, cameraOption: selectedCameraOption, date: selectedDate)
+    do {
+      try filterDataManager.save(filter: filter)
+    } catch {
+      print(error)
+    }
   }
   
   func loadMoreData() {

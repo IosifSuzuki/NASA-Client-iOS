@@ -14,13 +14,14 @@ struct HistoryCoordinator: View {
   @State var isConfirmationDialogPresented = false
   
   init() {
-    self.viewModel = HistoryViewModel()
+    let filterDataManager = FilterDataManager(persistContainer: .shared)
+    self.viewModel = HistoryViewModel(filterDataManager: filterDataManager)
   }
   
   var body: some View {
     VStack {
       Rectangle()
-        .fill(Color.accentColor)
+        .fill(Color.accentOne)
         .ignoresSafeArea()
         .frame(height: 20)
       HistoryView(
@@ -54,6 +55,7 @@ struct HistoryCoordinator: View {
           isConfirmationDialogPresented = false
         }
         Button(LocalizedStringKey("Delete"), role: .destructive) {
+          viewModel.deleteFilter()
           isConfirmationDialogPresented = false
         }
         Button(LocalizedStringKey("Cancel"), role: .cancel) {

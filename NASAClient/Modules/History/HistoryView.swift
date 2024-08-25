@@ -24,6 +24,7 @@ struct HistoryView: View {
             ForEach(viewModel.dataSource, id: \.id) { model in
               CardHistoryView(model: model)
                 .onTapGesture {
+                  viewModel.select(cardHistoryModel: model)
                   isConfirmationDialogPresented = true
                 }
             }
@@ -37,6 +38,12 @@ struct HistoryView: View {
 }
 
 #Preview {
-  let viewModel = HistoryViewModel()
-  return HistoryView(viewModel: viewModel, isConfirmationDialogPresented: .constant(false))
+  let filterDataManager = FilterDataManager(persistContainer: .shared)
+  let viewModel = HistoryViewModel(
+    filterDataManager: filterDataManager
+  )
+  return HistoryView(
+    viewModel: viewModel,
+    isConfirmationDialogPresented: .constant(false)
+  )
 }

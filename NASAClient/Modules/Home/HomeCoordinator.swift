@@ -17,7 +17,8 @@ struct HomeCoordinator: View {
   
   init() {
     let apiClient = APIClient()
-    viewModel = HomeViewModel(apiClient: apiClient)
+    let filterDataManager = FilterDataManager(persistContainer: .shared)
+    viewModel = HomeViewModel(apiClient: apiClient, filterDataManager: filterDataManager)
   }
   var body: some View {
     NavigationStack {

@@ -110,7 +110,8 @@ struct HomeView: View {
 
 #Preview {
   let apiClient = APIClient()
-  let viewModel = HomeViewModel(apiClient: apiClient)
+  let filterDataManager = FilterDataManager(persistContainer: .shared)
+  let viewModel = HomeViewModel(apiClient: apiClient, filterDataManager: filterDataManager)
   return HomeView(
     viewModel: viewModel,
     isImagePickerPresented: .constant(false),

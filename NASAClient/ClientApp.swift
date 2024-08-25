@@ -9,9 +9,14 @@ import SwiftUI
 
 @main
 struct ClientApp: App {
-    var body: some Scene {
-        WindowGroup {
-          HomeCoordinator()
-        }
-    }
+  
+  init() {
+    _ = PersistenceContainer.shared
+  }
+  
+  var body: some Scene {
+      WindowGroup {
+        HomeCoordinator()
+      }
+  }
 }

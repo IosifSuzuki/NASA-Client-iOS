@@ -8,6 +8,19 @@
 import Foundation
 
 extension Date {
+  
+  var startDay: Date {
+    let calendar = Calendar(identifier: .gregorian)
+    
+    return calendar.startOfDay(for: self)
+  }
+  
+  var endDay: Date {
+    let calendar = Calendar(identifier: .gregorian)
+    
+    return calendar.date(bySetting: .second, value: 86399, of: startDay) ?? .now
+  }
+  
   func toString(format: String = "yyyy-MM-dd") -> String {
     let formatter = DateFormatter()
     formatter.dateStyle = .short

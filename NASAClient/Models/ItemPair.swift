@@ -8,6 +8,6 @@
 import Foundation
 
 struct ItemPair: Hashable {
-  let index: Int
+  let id: Int
   let title: String
 }

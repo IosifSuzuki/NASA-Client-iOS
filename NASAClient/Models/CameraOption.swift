@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum CameraOption: String, CaseIterable {
+enum CameraOption: Int, CaseIterable {
   case fhaz
   case rhaz
   case mast

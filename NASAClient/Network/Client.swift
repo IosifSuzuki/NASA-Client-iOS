@@ -21,7 +21,7 @@ class APIClient: HTTP.Requestable {
     guard let urlRequest = request.urlRequest else {
       return Fail<T, HTTP.NetworkError>(error: .badRequest).eraseToAnyPublisher()
     }
-    print("will execute request: \(request.debugString)")
+    print("preparing request: \(request.debugString)")
     return URLSession
       .shared
       .dataTaskPublisher(for: urlRequest)

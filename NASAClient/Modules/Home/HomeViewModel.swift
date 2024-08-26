@@ -19,28 +19,24 @@ class HomeViewModel: ObservableObject {
   
   @Published var title: String
   @Published var dataSource: [CardRover] = []
+  @Published var selectedRoverText = ""
+  @Published var selectedCameraText = ""
+  @Published var selectedDateText = ""
   @Published var selectedDate: Date
-  @Published var selectedRoverText: String
-  @Published var selectedCameraText: String
   @Published var selectedRoverItemPair: ItemPair?
   @Published var selectedCameraItemPair: ItemPair?
+  @Published var filter: Filter
   @Published var state: State = .noDate
   
-  var selectedDateText: String {
-    selectedDate
-      .toString(format: "MMMM d, yyyy")
-      .capitalized
-  }
-  
   var roverItems: [ItemPair] {
-    RoverOption.allCases.enumerated().map { idx, option in
-      ItemPair(index: idx, title: option.name)
+    RoverOption.allCases.map { option in
+      ItemPair(id: option.rawValue, title: option.name)
     }
   }
   
   var cameraItems: [ItemPair] {
-    selectedRoverOption.availableCams.enumerated().map { idx, option in
-      ItemPair(index: idx, title: option.fullName)
+    filter.roverOption.availableCams.map { option in
+      ItemPair(id: option.rawValue, title: option.fullName)
     }
   }
   
@@ -48,8 +44,6 @@ class HomeViewModel: ObservableObject {
     selectedCardRover?.imageURL
   }
   
-  private var selectedRoverOption: RoverOption = .curiosity
-  private var selectedCameraOption: CameraOption = .navcam
   private var selectedCardRover: CardRover?
   private let pageSize: Int = 25
   private var page: Int = 1
@@ -62,10 +56,15 @@ class HomeViewModel: ObservableObject {
     self.title = String(localized: "Home.title")
     self.apiClient = apiClient
     self.filterDataManager = filterDataManager
-    self.selectedDate = Date.date(year: 2023, month: 12, day: 01) ?? .now
-    self.selectedRoverText = selectedRoverOption.name
-    self.selectedCameraText = selectedCameraOption.shortName
-    
+    let selectedDate = Date.date(year: 2023, month: 12, day: 01) ?? .now
+    self.selectedDate = selectedDate
+    filter = Filter(
+      roverOption: .curiosity,
+      cameraOption: .chemcam,
+      date: selectedDate
+    )
+    selectedRoverItemPair = .init(id: filter.roverOption.rawValue, title: filter.roverOption.name)
+    selectedCameraItemPair = .init(id: filter.cameraOption.rawValue, title: filter.cameraOption.shortName)
     addObservers()
   }
   
@@ -74,7 +73,6 @@ class HomeViewModel: ObservableObject {
   }
   
   func saveFilter() {
-    let filter = Filter(roverOption: selectedRoverOption, cameraOption: selectedCameraOption, date: selectedDate)
     do {
       try filterDataManager.save(filter: filter)
     } catch {
@@ -95,6 +93,12 @@ class HomeViewModel: ObservableObject {
     dataSource = []
     fetchSubcription?.cancel()
     fetchPhotos()
+  }
+  
+  func apply(filter: Filter) {
+    selectedDate = filter.date
+    selectedRoverItemPair = .init(id: filter.roverOption.rawValue, title: filter.roverOption.name)
+    selectedCameraItemPair = .init(id: filter.cameraOption.rawValue, title: filter.cameraOption.shortName)
   }
   
   private func fetchPhotos() {
@@ -137,9 +141,9 @@ class HomeViewModel: ObservableObject {
   private func preparePhotosRequest() -> AnyPublisher<Photos, HTTP.NetworkError> {
     let request = HTTP.Request(
       endpoint: NASAEndpoints.photos(
-        roverOption: selectedRoverOption,
-        cameraOption: selectedCameraOption,
-        date: selectedDate,
+        roverOption: filter.roverOption,
+        cameraOption: filter.cameraOption,
+        date: filter.date,
         page: page
       ),
       body: nil
@@ -148,56 +152,41 @@ class HomeViewModel: ObservableObject {
   }
   
   private func addObservers() {
-    $selectedRoverItemPair
-      .map { [weak self] itemPair -> RoverOption in
-        guard let self else {
-          return .curiosity
+    Publishers.CombineLatest3($selectedRoverItemPair, $selectedCameraItemPair, $selectedDate)
+      .compactMap { roverItemPair, cameraItemPair, date -> Filter? in
+        let defaultRoverOption: RoverOption = .curiosity
+      	var roverOption: RoverOption = defaultRoverOption
+        if let optionID = roverItemPair?.id {
+          roverOption = RoverOption(rawValue: optionID) ?? defaultRoverOption
         }
-        if let id = itemPair?.index, RoverOption.allCases.indices.contains(id) {
-          return RoverOption.allCases[id]
-        } else if RoverOption.allCases.contains(self.selectedRoverOption){
-          return self.selectedRoverOption
+        
+        let defaultCameraOption: CameraOption = .fhaz
+        var cameraOption: CameraOption = defaultCameraOption
+        if let optionID = cameraItemPair?.id {
+          cameraOption = CameraOption(rawValue: optionID) ?? defaultCameraOption
         }
-        return .curiosity
+        if !roverOption.availableCams.contains(cameraOption) {
+          cameraOption = roverOption.availableCams.first ?? defaultCameraOption
+        }
+        
+        return Filter(
+          roverOption: roverOption,
+          cameraOption: cameraOption,
+          date: date
+        )
       }
-      .sink(receiveValue: { [weak self] roverOption in
-        guard let self else {
-          return
-        }
-        
-        self.selectedRoverOption = roverOption
-        self.selectedRoverText = roverOption.name
-        
-        if !roverOption.availableCams.contains(self.selectedCameraOption) {
-          self.selectedCameraOption = roverOption.availableCams.first ?? .fhaz
-          self.selectedCameraText = self.selectedCameraOption.shortName
-        }
-        
-        self.reloadData()
-      })
-      .store(in: &bag)
-    $selectedCameraItemPair
-      .map { [weak self] itemPair -> CameraOption in
-        guard let self else {
-          return .fhaz
-        }
-        if let id = itemPair?.index, self.selectedRoverOption.availableCams.indices.contains(id) {
-          return self.selectedRoverOption.availableCams[id]
-        } else if self.selectedRoverOption.availableCams.contains(self.selectedCameraOption) {
-          return self.selectedCameraOption
-        }
-        return self.selectedRoverOption.availableCams.first ?? .fhaz
-      }
-      .sink(receiveValue: { [weak self] cameraOption in
-        self?.selectedCameraOption = cameraOption
-        self?.selectedCameraText = cameraOption.shortName
+      .sink(receiveValue: { [weak self] filter in
+        self?.filter = filter
         self?.reloadData()
       })
       .store(in: &bag)
-    $selectedDate
-      .sink(receiveValue: { [weak self] selectedDate in
-        self?.reloadData()
-      })
+    
+    $filter
+      .sink { [weak self] filter in
+        self?.selectedRoverText = filter.roverOption.name
+        self?.selectedCameraText = filter.cameraOption.shortName
+        self?.selectedDateText = filter.date.toString(format: "MMMM d, yyyy").capitalized
+      }
       .store(in: &bag)
   }
 }

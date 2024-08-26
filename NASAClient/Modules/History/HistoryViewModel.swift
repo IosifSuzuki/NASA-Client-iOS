@@ -11,10 +11,10 @@ class HistoryViewModel: ObservableObject {
   @Published var dataSource: [CardHistoryModel] = []
   
   let title = String(localized: "History.title")
+  var selectedFilter: Filter?
   
   private let filterDataManager: FilterDataManager
   private var filters: [Filter] = []
-  private var selectedFilter: Filter?
   
   init(filterDataManager: FilterDataManager) {
     self.filterDataManager = filterDataManager

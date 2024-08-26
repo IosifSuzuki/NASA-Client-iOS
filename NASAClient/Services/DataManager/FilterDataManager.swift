@@ -21,8 +21,8 @@ class FilterDataManager {
       return
     }
     let filterEntity = FilterEntity(context: persistenceContainer.container.viewContext)
-    filterEntity.camera = filter.cameraOption.rawValue
-    filterEntity.rover = filter.roverOption.rawValue
+    filterEntity.camera = Int32(filter.cameraOption.rawValue)
+    filterEntity.rover = Int32(filter.roverOption.rawValue)
     filterEntity.date = filter.date
     try persistenceContainer.container.viewContext.save()
   }
@@ -51,13 +51,13 @@ private extension FilterDataManager {
   func fetch(filter: Filter) throws -> FilterEntity? {
     let request = FilterEntity.fetchRequest()
     let datePredicate = NSPredicate(
-      format: "%K >= %@ AND %K <= %@", 
+      format: "%K >= %@ AND %K <= %@",
       #keyPath(FilterEntity.date),
       filter.date.startDay as NSDate, 
       #keyPath(FilterEntity.date),
       filter.date.endDay as NSDate
     )
-    let predicate = NSPredicate(format: "%K == %@ AND %K == %@", #keyPath(FilterEntity.rover), filter.roverOption.rawValue, #keyPath(FilterEntity.camera), filter.cameraOption.rawValue)
+    let predicate = NSPredicate(format: "%K == %d AND %K == %d", #keyPath(FilterEntity.rover), filter.roverOption.rawValue, #keyPath(FilterEntity.camera), filter.cameraOption.rawValue)
     request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: [datePredicate, predicate])
     request.fetchLimit = 1
     return try persistenceContainer.container.viewContext.fetch(request).first
@@ -69,8 +69,8 @@ private extension FilterDataManager {
   
   func map(filterEntity: FilterEntity) -> Filter? {
     guard
-      let roverOption = RoverOption(rawValue: filterEntity.rover ?? ""),
-      let cameraOption = CameraOption(rawValue: filterEntity.camera ?? ""),
+      let roverOption = RoverOption(rawValue: Int(filterEntity.rover)),
+      let cameraOption = CameraOption(rawValue: Int(filterEntity.camera)),
       let date = filterEntity.date
     else {
       return nil

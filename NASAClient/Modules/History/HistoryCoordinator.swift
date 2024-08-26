@@ -12,10 +12,11 @@ struct HistoryCoordinator: View {
   @Environment(\.presentationMode) var presentationMode
   
   @State var isConfirmationDialogPresented = false
-  
-  init() {
+  var applyFilter: (Filter) -> ()
+  init(applyFilter: @escaping ((Filter) -> ())) {
     let filterDataManager = FilterDataManager(persistContainer: .shared)
     self.viewModel = HistoryViewModel(filterDataManager: filterDataManager)
+    self.applyFilter = applyFilter
   }
   
   var body: some View {
@@ -53,6 +54,10 @@ struct HistoryCoordinator: View {
       ) {
         Button(LocalizedStringKey("Use")) {
           isConfirmationDialogPresented = false
+          if let selectedFilter = viewModel.selectedFilter {
+            presentationMode.wrappedValue.dismiss()
+            applyFilter(selectedFilter)
+          }
         }
         Button(LocalizedStringKey("Delete"), role: .destructive) {
           viewModel.deleteFilter()
@@ -67,5 +72,5 @@ struct HistoryCoordinator: View {
 }
 
 #Preview {
-  HistoryCoordinator()
+  HistoryCoordinator(applyFilter: { _ in })
 }

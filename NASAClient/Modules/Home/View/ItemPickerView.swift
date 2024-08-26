@@ -64,15 +64,15 @@ struct ItemPickerView: View {
 
 #Preview {
   let items = [
-    ItemPair(index: 0, title: "Front Hazard Avoidance Camera"),
-    ItemPair(index: 1, title: "Rear Hazard Avoidance Camera"),
-    ItemPair(index: 2, title: "Mast Camera"),
-    ItemPair(index: 3, title: "Chemistry and Camera Complex"),
-    ItemPair(index: 4, title: "Mars Hand Lens Imager"),
-    ItemPair(index: 5, title: "Mars Descent Imager"),
-    ItemPair(index: 6, title: "Navigation Camera"),
-    ItemPair(index: 7, title: "Panoramic Camera"),
-  	ItemPair(index: 8, title: "Miniature Thermal Emission Spectrometer (Mini-TES)"),
+    ItemPair(id: 0, title: "Front Hazard Avoidance Camera"),
+    ItemPair(id: 1, title: "Rear Hazard Avoidance Camera"),
+    ItemPair(id: 2, title: "Mast Camera"),
+    ItemPair(id: 3, title: "Chemistry and Camera Complex"),
+    ItemPair(id: 4, title: "Mars Hand Lens Imager"),
+    ItemPair(id: 5, title: "Mars Descent Imager"),
+    ItemPair(id: 6, title: "Navigation Camera"),
+    ItemPair(id: 7, title: "Panoramic Camera"),
+  	ItemPair(id: 8, title: "Miniature Thermal Emission Spectrometer (Mini-TES)"),
   ]
   let selectedItem: ItemPair = items.first!
   return ItemPickerView(

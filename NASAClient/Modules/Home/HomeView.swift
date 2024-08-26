@@ -69,9 +69,6 @@ struct HomeView: View {
         )
       }
     }
-    .onAppear {
-      viewModel.reloadData()
-    }
   }
   
   private func noDate(title: String, image: Image) -> some View {
@@ -90,7 +87,9 @@ struct HomeView: View {
   
   private var historyButton: some View {
     NavigationLink {
-      HistoryCoordinator()
+      HistoryCoordinator { filter in
+        viewModel.apply(filter: filter)
+      }
     } label: {
       ZStack {
         Color(.accentOne).clipShape(Circle())

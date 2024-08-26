@@ -22,7 +22,7 @@ enum NASAEndpoints: HTTP.Endpoint {
   }
   
   var parameters: [URLQueryItem] {
-    let apiKeyURLQueryItem = URLQueryItem(name: "api_key", value: "DEMO_KEY")
+    let apiKeyURLQueryItem = URLQueryItem(name: "api_key", value: "wWu41HeX7HV9xMadNXgMeOSzDO2PmuG5iyTbbaHi")
     var queryItems: [URLQueryItem] = [apiKeyURLQueryItem]
     switch self {
     case let .photos(_, cameraOption, date, page):

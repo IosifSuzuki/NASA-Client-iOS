@@ -18,7 +18,7 @@ extension Date {
   var endDay: Date {
     let calendar = Calendar(identifier: .gregorian)
     
-    return calendar.date(bySetting: .second, value: 86399, of: startDay) ?? .now
+    return calendar.date(byAdding: DateComponents(day: 1, second: -1), to: startDay) ?? .now
   }
   
   func toString(format: String = "yyyy-MM-dd") -> String {

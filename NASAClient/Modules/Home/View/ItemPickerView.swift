@@ -74,7 +74,6 @@ struct ItemPickerView: View {
     ItemPair(id: 7, title: "Panoramic Camera"),
   	ItemPair(id: 8, title: "Miniature Thermal Emission Spectrometer (Mini-TES)"),
   ]
-  let selectedItem: ItemPair = items.first!
   return ItemPickerView(
     title: "Camera", 
     selectedItem: .constant(nil),

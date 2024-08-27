@@ -81,7 +81,6 @@
 		84CDD8B62C7DF3D400ED8781 /* loading-lottie.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = "loading-lottie.json"; sourceTree = "<group>"; };
 		84CDD8B72C7DF3D400ED8781 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		84CDD8BB2C7DF3D400ED8781 /* scheme.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = scheme.xcdatamodel; sourceTree = "<group>"; };
-		84CDD8BC2C7DF3D400ED8781 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		84CDD8BE2C7DF3D400ED8781 /* AttributedLabel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttributedLabel.swift; sourceTree = "<group>"; };
 		84CDD8BF2C7DF3D400ED8781 /* LoadingRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingRow.swift; sourceTree = "<group>"; };
 		84CDD8C02C7DF3D400ED8781 /* LoadingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
@@ -145,7 +144,6 @@
 				84CDD8AC2C7DF3D400ED8781 /* Models */,
 				84CDD8DC2C7DF3D400ED8781 /* Modules */,
 				84CDD89F2C7DF3D300ED8781 /* Network */,
-				84CDD8BD2C7DF3D400ED8781 /* Preview Content */,
 				84CDD8B32C7DF3D400ED8781 /* Services */,
 				84CDD8BA2C7DF3D400ED8781 /* Supporting Files */,
 				84CDD8C32C7DF3D400ED8781 /* View */,
@@ -225,15 +223,6 @@
 				84CDD8B92C7DF3D400ED8781 /* scheme.xcdatamodeld */,
 			);
 			path = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		84CDD8BD2C7DF3D400ED8781 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				84CDD8BC2C7DF3D400ED8781 /* Assets.xcassets */,
-			);
-			name = "Preview Content";
-			path = "../../../NASA-Client-iOS/NASAClient/Preview Content";
 			sourceTree = "<group>";
 		};
 		84CDD8C32C7DF3D400ED8781 /* View */ = {
